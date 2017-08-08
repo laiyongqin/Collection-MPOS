@@ -1,0 +1,286 @@
+{{include file="common/header.html"}}
+<link type="text/css" href="/public/css/novice.css" rel="stylesheet">
+
+<style>
+    html, body { font-family:"微软雅黑"; width:100%; height:100%; overflow:hidden;
+        margin: 0;
+        padding: 0;
+        overflow:auto !important;
+    }
+    .footer   { margin-top:0;}
+    #fb7 #fb7-about a{color:#333;}
+</style>
+
+
+<!-- BEGIN FLIPBOOK STRUCTURE -->
+<div data-template="true" data-cat="book7" id="fb7-ajax" style="margin-top:3%;">
+    <!-- BEGIN HTML BOOK -->
+    <div data-current="book7" class="fb7" id="fb7">
+        <!-- preloader -->
+        <div class="fb7-preloader">
+            <div id="wBall_1" class="wBall">
+                <div class="wInnerBall">
+                </div>
+            </div>
+            <div id="wBall_2" class="wBall">
+                <div class="wInnerBall">
+                </div>
+            </div>
+            <div id="wBall_3" class="wBall">
+                <div class="wInnerBall">
+                </div>
+            </div>
+            <div id="wBall_4" class="wBall">
+                <div class="wInnerBall">
+                </div>
+            </div>
+            <div id="wBall_5" class="wBall">
+                <div class="wInnerBall">
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- BEGIN CONTAINER BOOK -->
+        <div id="fb7-container-book">
+
+            <!-- 分页链接 -->
+            <section id="fb7-deeplinking">
+                <ul>
+                    <li data-address="page1" data-page="1"></li>
+                    {{if $pageContent}}
+                    {{foreach from=$pageContent key=key item=vo}}
+                    <li data-address="page{{$key + 2}}" data-page="{{$key + 2}}"></li>
+                    {{/foreach}}
+                    {{/if}}
+                    <li data-address="page{{$pageTotal+2}}" data-page="{{$pageTotal+2}}"></li>
+                </ul>
+            </section>
+            <!-- END deep linking -->
+
+
+            <!-- 目录 -->
+            <section id="fb7-about" style=" left:2%; width:57% !importan; z-index:9999 !important;">
+
+
+                <!-- 分级目录 -->
+                <div class="fb7-menu">
+                    {{if $noviceCateList}}
+                    {{foreach from=$noviceCateList item=vo}}
+                    <div class="hang">
+                        <div class="tit">
+                            <strong>{{$vo.cateInfo.nc_name}}</strong>
+                        </div>
+                        <div class="con">
+                            {{if $vo.sonList}}
+                            {{foreach from=$vo.sonList item=v}}
+                            <a href="/novice?cate={{$v.cateInfo.nc_id}}">{{$v.cateInfo.nc_name}}</a>
+                            {{/foreach}}
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="clear10"></div>
+                    {{/foreach}}
+                    {{/if}}
+
+                </div>
+
+                <!-- 列表 -->
+                <div class="fb7-news">
+                    <div class="tit">{{$cateInfo.nc_name}}</div>
+                    <div id="list">
+                    <ul class="fb7-list" >
+                        {{if $data}}
+                        {{foreach from=$data item=vo}}
+                        <li><a href="/novice/index/?cate={{$vo.nc_id}}&id={{$vo.n_id}}">{{$vo.n_title}}</a></li>
+                        {{/foreach}}
+                        {{/if}}
+                    </ul>
+                    <div class="clear"></div>
+                    <div class="page-updown">
+                        {{$page}}
+                    </div>
+                        </div>
+                </div>
+
+                <div class="novice-data">
+                    <iframe width="658px" height="180px" frameborder="0" src="http://www.hainancec.com/otc/otc/index/list.jsp" scrolling="no"></iframe>
+                </div>
+
+            </section>
+            <!-- END ABOUT -->
+
+
+            <!-- BEGIN PAGES -->
+            <div id="fb7-book" style="background:#fff;">
+                <!-- BEGIN PAGE 1 -->
+                <div style="background-image:url(/public/images/1.jpg)" class="fb7-noshadow">
+                    <div class="tit">{{$articleInfo.n_title}}</div>
+                    <!-- begin container page book -->
+                    <div class="fb7-cont-page-book">
+                        <!-- description for page -->
+                        <div class="fb7-page-book">
+                        </div>
+                    </div>
+                    <!-- end container page book -->
+                </div>
+                <!-- END PAGE 1 -->
+
+
+                {{if $pageContent}}
+                {{foreach from=$pageContent key=key item=vo}}
+                <!-- BEGIN PAGE 2 -->
+                <div style="background-image:url(/public/images/3.jpg)">
+                    <!-- begin container page book -->
+                    <div class="fb7-cont-page-book">
+                        <!-- description for page  -->
+                        <div class="fb7-page-book">
+                            {{$vo}}
+                        </div>
+                        <!-- begin number page -->
+                        <!--<div class="fb7-meta">-->
+                        <!--<span class="fb7-num">{{$key+1}}</span>-->
+                        <!--</div>-->
+                        <!-- end number page -->
+                    </div>
+                    <!-- end container page book -->
+                </div>
+                <!-- END PAGE 2 -->
+                {{/foreach}}
+                {{/if}}
+                <!-- BEGIN PAGE 12 -->
+                <div style="background-image:url(/public/images/end.jpg)">
+                    <a href="/" target="_blank"><div class="fb7-cont-page-book">
+                        <div class="fb7-page-book">
+                        </div>
+                    </div></a>
+                </div>
+                <!-- END PAGE 12 -->
+            </div>
+            <!-- END PAGES -->
+
+
+            <!-- 翻页 -->
+            <a class="fb7-nav-arrow prev"></a>
+            <a class="fb7-nav-arrow next"></a>
+
+            <!-- shadow -->
+            <div class="fb7-shadow"></div>
+
+        </div>
+        <!-- END CONTAINER BOOK -->
+
+        <!-- 底部内容 -->
+        <div id="fb7-footer" style="display:none;">
+
+            <div class="fb7-bcg-tools"></div>
+
+            <div class="fb7-menu" id="fb7-center">
+                <ul>
+
+                    <!-- margin left -->
+                    <li></li>
+
+                    <!-- icon_zoom_in -->
+                    <li>
+                        <a title="放大" class="fb7-zoom-in"></a>
+                    </li>
+
+
+                    <!-- icon_zoom_out -->
+                    <li>
+                        <a title="缩小" class="fb7-zoom-out"></a>
+                    </li>
+
+
+                    <!-- icon_zoom_auto -->
+                    <li>
+                        <a title="自动" class="fb7-zoom-auto"></a>
+                    </li>
+
+
+                    <!-- icon_zoom_original -->
+                    <li>
+                        <a title="还原" class="fb7-zoom-original"></a>
+                    </li>
+
+
+                    <!-- icon_home -->
+                    <li>
+                        <a title="目录" class="fb7-home"></a>
+                    </li>
+
+                    <!-- icon fullscreen -->
+                    <li>
+                        <a title="全屏" class="fb7-fullscreen"></a>
+                    </li>
+
+                    <!-- margin right -->
+                    <li></li>
+
+                </ul>
+            </div>
+
+        </div>
+        <!-- END FOOTER -->
+
+    </div>
+    <!-- END HTML BOOK -->
+
+
+</div>
+<!-- END FLIPBOOK STRUCTURE -->
+
+<!-- END FLIPBOOK STRUCTURE -->
+<!-- END FLIPBOOK STRUCTURE -->
+<script src="/public/js/turn.js"></script>
+<script src="/public/js/jquery.fullscreen.js"></script>
+<script src="/public/js/jquery.address-1.6.min.js"></script>
+<script src="/public/js/onload.js"></script>
+<script type="text/javascript" src="/public/js/lp.js"></script>
+<script>
+    $('#fb7-ajax').data('config',
+            {
+                "page_width":"800",
+                "page_height":"920",
+                "go_to_page":"Page",
+                "gotopage_width":"45",
+                "zoom_double_click":"1",
+                "zoom_step":"0.06",
+                "tooltip_visible":"true",
+                "toolbar_visible":"true",
+                "deeplinking_enabled":"true",
+                "double_click_enabled":"true",
+                "rtl":"false"
+            })
+    function getList(url){
+        $.ajax({
+            type: 'POST',
+            data : {type : 'load'},
+            url : url,
+            dataType: 'html',
+            success: function(data) {
+                if (data) {
+                    //赋值数据
+                    $("#list").html(data);
+                }
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        $(".novice-data a").click(function(){
+            $(".novice-data .con").slideToggle("slow");
+        });
+    })
+
+    $(document).ready(function(){
+        $("#fb7 .fb7-menu .hang").hover(function(){
+            $(this).children("#fb7 .fb7-menu .hang .con").fadeToggle("slow");
+        });
+    });
+
+</script>
+
+{{include file="common/footer.html"}}

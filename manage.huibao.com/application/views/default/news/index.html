@@ -1,0 +1,153 @@
+{{include file="common/header.html"}}
+
+<div class="main">
+    {{include file="common/menu.html"}}
+
+    <div id="right">
+        <!--面包屑导航-->
+        <ol class="breadcrumb">
+            <li><a href="javascript:void(0);">新闻列表管理 </a></li>
+            <li class="active">新闻列表</li>
+        </ol>
+
+        <div class="right_con">
+            <!--搜索区域-->
+            <form class="form-inline pull-left" id="searchForm">
+                <div class="form-group">类型：
+                    <select name="tid" id="tid" class="form-control">
+                        {{$typeOption}}
+                    </select>
+                </div>
+                <div class="form-group">分类：
+                    <select name="pid" id="pid" class="form-control">
+                        {{$categoryOption}}
+                    </select>
+                </div>
+                <div class="form-group">标题：
+                    <input type="text" name="title" value="{{$title}}" class="form-control" placeholder="标题" style="width: 300px;">
+                </div>
+                <div class="form-group">
+                    状态：
+                    <select name="status" id="status" class="form-control">
+                        {{$statusOption}}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <button type="button" class="btn btn-default pull-right" onclick="window.location.reload();">刷新界面</button>
+            <button type="button" class="btn btn-primary pull-right"  onclick="location.href='/news/form/'">添加新闻</button>
+            <button type="button" class="btn btn-primary pull-right"  id="collectNews">采集</button>
+            <div class="clear10"></div>
+
+            <!-- 表格 -->
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td><input type="checkbox" data-choose="all" > <input type="button" class="btn btn-default" name="改为正常" value="改为正常" id="changeStatus"></td>
+                    <td>序号</td>
+                    <td>类型</td>
+                    <td>所在分类</td>
+                    <td>标题</td>
+                    <td>排序</td>
+                    <td>状态</td>
+                    <td>添加时间</td>
+                    <!--<td>是否推荐</td>-->
+                    <td>操作</td>
+                </tr>
+                {{if $data}}
+                {{foreach from=$data item=row}}
+                <tr>
+                    <td><input type="checkbox"  class="checkList" name="check[]" value="{{$row.n_id}}"></td>
+                    <td>{{$row.n_id}}</td>
+                    <td>{{if $row.nc_type==1}}<span class="label label-success">新手区</span>{{else}}<span class="label label-danger">富豪区</span>{{/if}}</td>
+                    <td>{{$cateList[$row.nc_id]}}</td>
+                    <td>
+						{{if $cateList[$row.nc_id]=='头条'}}
+						{{$row.n_title}}---{{if $row.n_type==2}}<span class="label label-success">国内新闻</span>{{else}}<span class="label label-danger">国际新闻</span>{{/if}}
+						{{else}}
+						{{$row.n_title}}
+						{{/if}}</td>
+
+                    <td>{{$row.n_sort}}</td>
+                    <td>
+                        <a href="javascript:void(0);" data-json="确认要更改状态吗？" data-href="/news/status/id/{{$row.n_id}}/status/{{$row.n_status}}">
+                            <i class="glyphicon {{if $row.n_status == 1}}glyphicon-eye-open{{else}}glyphicon-eye-close{{/if}}" title="{{if $row.n_status == 2}}禁用{{else}}正常{{/if}}"></i>
+                            {{if $row.n_status == 1}}<span class="label label-success">正常</span>{{else}}<span class="label label-warning">禁用</span>{{/if}}
+                        </a>
+                    </td>
+                    <td>{{$row.n_addtime}}</td>
+                    <!--<td>-->
+                        <!--<a href="javascript:void(0);" data-json="确认要更改状态吗？" data-href="/news/recommend/id/{{$row.n_id}}/status/{{$row.n_status}}">-->
+                            <!--<i class="glyphicon {{if $row.n_recommend == 1}}glyphicon-eye-open{{else}}glyphicon-eye-close{{/if}}" title="{{if $row.n_status == 2}}禁用{{else}}正常{{/if}}"></i>-->
+                            <!--{{if $row.n_recommend == 1}}<span class="label label-success">推荐</span>{{else}}<span class="label label-warning">未推荐</span>{{/if}}-->
+                        <!--</a>-->
+                    <!--</td>-->
+                    <td>
+                        <a class="glyphicon glyphicon-edit" href="{{$baseUrl}}/form/id/{{$row.n_id}}" title="编辑"></a>&nbsp;&nbsp;
+                        <a class="glyphicon glyphicon-remove" data-json="确认要删除吗？" href="javascript:void(0);" title="删除" data-href="/news/delete/id/{{$row.n_id}}/"></a>&nbsp;&nbsp;
+                    </td>
+                </tr>
+                {{/foreach}}
+                {{/if}}
+            </table>
+            <!-- 分页 -->
+
+            {{if $data}}
+            <nav>
+                <ul class="pagination pull-right">{{$page}}</ul>
+            </nav>
+            {{/if}}
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('#tid').bind('change', function(){
+            var tid = $(this).val();
+            $.post('/newscategory/getType', {tid,tid}, function(data){
+                if(data.code == 1){
+                    $('#pid').html(data.data);
+                }
+            }, 'json')
+        })
+
+        $('#collectNews').click(function(){
+            var tid = $('#tid').val();
+            var pid = $('#pid').val();
+            $.post('/ajax/collect/news', {tid : tid, pid : pid}, function(data){
+                if(data.status == 'y'){
+                    alert(data.info);
+                    $('#searchForm').submit();
+                }else{
+                    alert(data.info);
+                }
+            }, 'json')
+        })
+
+        $('#changeStatus').click(function(){
+            var ids = '';
+            $('.checkList').each(function(){
+                if($(this).is(":checked")){
+                    ids += $(this).val();
+                    ids += ',';
+                }
+            })
+
+            if(ids){
+                ids = ids.substring(0, ids.length - 1);
+            }else{
+                alert('请选择需要操作的列表');return;
+            }
+
+            $.post('/news/changeMulti', {ids : ids}, function(data){
+                if(data.status == 'y'){
+                    alert(data.info);
+                    $('#searchForm').submit();
+                }else{
+                    alert(data.info);
+                }
+            }, 'json');
+        })
+    })
+</script>
+{{include file="common/footer.html"}}

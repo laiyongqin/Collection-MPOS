@@ -1,0 +1,20 @@
+{{include file="common/header.html"}}
+
+<!-- 页面主体 -->
+<div class="download block2">
+    <div class="nav-title">
+        <div class="crumb"><a href="/"><i><img src="/public/images/home.png" width="14" height="13"></i>首页</a> > <a href="/service">特色服务</a> > <a>软件下载</a></div>
+        <b>软件下载</b>
+    </div>
+    <div class="con">
+        {{foreach from=$banner item=v}}
+        <div class="large block"><a href="{{$v.a_link}}"><img src="{{$v.a_picture}}"></a></div>
+        {{/foreach}}
+        <ul>
+                {{foreach from=$sofe item=v2}}
+            <li><a href="{{$v2.s_download_link}}"><img src="{{$smarty.const.IMAGE_URL}}{{$v2.s_cover}}" style="width:100%;"></a></li>
+            {{/foreach}}
+        </ul>
+    </div>
+</div>
+{{include file="common/footer.html"}}

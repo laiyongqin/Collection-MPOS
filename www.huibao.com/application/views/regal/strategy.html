@@ -1,0 +1,148 @@
+{{include file="common/header.html"}}
+<style>
+    .pagination{width:100%; margin:0 auto 20px; text-align: center;}
+    .pagination a{color:#fff; display: inline-block;width:25px;height:25px; line-height:25px; margin:0 5px;border:solid 1px #fff; border-radius:3px; background: rgba(0,0,0,.5); text-align: center; background: #1f2e5b; font-size: 13px;}
+    .pagination .current{ background: #ff6519 ;}
+    .pagination a:hover{ background: #ff6519;}
+
+</style>
+<!-- 页面主体 -->
+<div class="main_vb">
+    <div class="news block2">
+        <div class="nav-title">
+            <div class="crumb"><a href="/index"><i><img src="/public/images/home.png" width="14" height="13"></i>首页</a> > <a href="/regal?id={{$id}}">{{$cateInfo.nc_name}}</a></div>
+            <ul>
+                {{if $regalCategory}}
+                {{foreach from=$regalCategory item=vo}}
+                <li>
+                    <a {{if $vo.cateInfo.nc_id==13}}href="/regal/strategy?id={{$vo.cateInfo.nc_id}}{{elseif $vo.cateInfo.nc_id==11}} href="/regal/instant?id={{$vo.cateInfo.nc_id}}{{elseif $vo.cateInfo.nc_id==12}}href="/regal?id=14{{else}}href="/regal?id={{$vo.cateInfo.nc_id}}{{/if}}" {{if $id==$vo.cateInfo.nc_id}}class='on'{{/if}}>{{$vo.cateInfo.nc_name}}<i></i></a>
+                    <ul class="menu">
+                        {{if $vo.sonList}}
+                        {{foreach from=$vo.sonList item=voson}}
+                        <li><a {{if $voson.cateInfo.nc_id==19  or $voson.cateInfo.nc_id==20 or $voson.cateInfo.nc_id==20 or $voson.cateInfo.nc_id==21 or $voson.cateInfo.nc_id==22}} href="/regal/strategylist?id={{$voson.cateInfo.nc_id}}"{{else}}href="/regal?id={{$voson.cateInfo.nc_id}}"{{/if}}>{{$voson.cateInfo.nc_name}}</a></li>
+                        {{/foreach}}
+                        {{/if}}
+                    </ul>
+                </li>
+                {{/foreach}}
+                {{/if}}
+                <li><a href="/financeDate">财经日历</a><i></i>
+            </ul>
+            <div class="menu-bj"></div>
+        </div>
+        <div class="strategy-tit">智能预测交易走向   让交易变得简单</div>
+
+        <div class="list1">
+            <ul>
+                {{if $data}}
+                <li>
+                    <a href="/news/details?id={{$data[0].n_id}}">
+                        <div class="time">{{$data[0].n_addtime}}</div>
+                        <div class="text">{{$data[0].n_des}}</div>
+                    </a>
+                </li>
+                {{/if}}
+            </ul>
+        </div>
+        <!-- 选项卡 -->
+        <div class="strategy-tab">
+            <ul>
+                {{if $tradeData}}
+                {{foreach from=$tradeData item=v}}
+                <li {{if $type==$v.tt_id}}class="cur"{{/if}}><a href="strategy?id={{$id}}&type={{$v.tt_id}}">{{$v.tt_name}}</a></li>
+                {{/foreach}}
+                {{/if}}
+            </ul>
+            <div class="con block">
+                {{if $tradeData}}
+                {{foreach from=$tradeData item=v2}}
+                <p {{if $type==$v2.tt_id}}class="on"{{/if}}>
+                    <span class="date_time">{{$smarty.now|date_format:'%Y-%m-%d %H:%M'}}</span>
+                    <span class="img"><img src="{{$smarty.const.IMAGE_URL}}{{$v2.ts_cover}}" width="15" height="15"></span>
+                    <span><i><img src="/public/images/strategy_tb1.png" width="15" height="15"></i>目标：{{$v2.ts_target}}</span>
+                    <span><i><img src="/public/images/strategy_tb2.png" width="15" height="15"></i>止损：{{$v2.ts_loss}}</span>
+                    <span class="red"><i><img src="/public/images/strategy_tb3.png" width="15" height="15"></i>买入：{{$v2.ts_purchase}}</span>
+                </p>
+                {{/foreach}}
+                {{/if}}
+                <div style="text-align: center;color:#fff;margin-bottom: 10px; font-size: 12px;">以上建议，仅供参考，投资有风险，入市需谨慎。</div>
+            </div>
+
+        </div>
+
+        {{if $data}}
+        <!--早评-->
+        <div class="news-tit">{{$cateList[0].nc_name}}<a href="strategylist?id={{$cateList[0].nc_id}}">more<i><img src="/public/images/more.png" width="5" height="9"></i></a></div>
+        <div class="list3">
+            <ul>
+                {{if $sunData}}
+                {{foreach from=$sunData key=sk item=sv}}
+                {{if $sk < 2}}
+                <li><a href="/news/details?id={{$sv.n_id}}">{{$cateList[0].nc_name}}：{{$sv.n_title}}<span>{{$sv.n_addtime}}</span></a></li>
+                {{/if}}
+                {{/foreach}}
+                {{/if}}
+            </ul>
+        </div>
+        <!--晚评-->
+        <div class="news-tit">{{$cateList[1].nc_name}}<a href="strategylist?id={{$cateList[1].nc_id}}">more<i><img src="/public/images/more.png" width="5" height="9"></i></a></div>
+        <div class="list3">
+            <ul>
+                {{if $nightData}}
+                {{foreach from=$nightData key=nk1 item=nv}}
+                {{if $nk1 < 2}}
+                <li><a href="/news/details?id={{$nv.n_id}}">{{$cateList[1].nc_name}}：{{$nv.n_title}}<span>{{$nv.n_addtime}}</span></a></li>
+                {{/if}}
+                {{/foreach}}
+                {{/if}}
+            </ul>
+        </div>
+        <!--周评-->
+        <div class="news-tit">{{$cateList[2].nc_name}}<a href="strategylist?id={{$cateList[2].nc_id}}">more<i><img src="/public/images/more.png" width="5" height="9"></i></a></div>
+        <div class="list3">
+            <ul>
+                {{if $weekData}}
+                {{foreach from=$weekData key=wk item=wv}}
+                {{if $wk < 2}}
+                <li> <a href="/news/details?id={{$wv.n_id}}">{{$cateList[2].nc_name}}：{{$wv.n_title}}<span>{{$wv.n_addtime}}</span></a></li>
+                {{/if}}
+                {{/foreach}}
+                {{/if}}
+            </ul>
+        </div>
+        <!--月评-->
+        <div class="news-tit">{{$cateList[3].nc_name}}<a href="strategylist?id={{$cateList[3].nc_id}}">more<i><img src="/public/images/more.png" width="5" height="9"></i></a></div>
+        <div class="list3">
+            <ul>
+                {{if $monData}}
+                {{foreach from=$monData key=nk2 item=nv}}
+                {{if $nk2 < 2}}
+                <li> <a href="/news/details?id={{$nv.n_id}}">{{$cateList[3].nc_name}}：{{$nv.n_title}}<span>{{$nv.n_addtime}}</span></a></li>
+                {{/if}}
+                {{/foreach}}
+                {{/if}}
+            </ul>
+        </div>
+
+
+        {{/if}}
+    </div>
+
+    <div class="sidebar">
+        <div class="box data1">
+            <div class="title">国际市场数据</div>
+            <div class="con"><iframe id="bottomprice" name="bottomprice" src="http://www.jin10.com/bottomprice/indexp.html" scrolling="no" width="342" frameborder="0" height="253"></iframe></div>
+        </div>
+        <div class="box data2">
+            <div class="title">海南大宗市场数据</div>
+            <div class="con"><iframe width="372px" height="180px" frameborder="0" src="http://www.hainancec.com/otc/otc/index/list.jsp" scrolling="no"></iframe> </div></div>
+        <div class="box" style="height:250px;">
+            <div class="title">全球指数</div>
+            <div class="con" style="padding-left: 50px;"><iframe width="372px" height="430px" frameborder="0" src="http://stock.10jqka.com.cn/api/stock_10.html" scrolling="no"></iframe> </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="clear"></div>
+{{include file="common/footer.html"}}

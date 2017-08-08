@@ -1,0 +1,43 @@
+{{include file="common/header.html"}}
+
+<!-- 页面主体 -->
+<div class="main_vb">
+    <div class="news block">
+        <div class="nav-title">
+            <div class="crumb"><a href="/index"><i><img src="/public/images/home.png" width="14" height="13"></i>首页</a> > <a {{if $cateInfo.nc_id==11}}href="/regal/firstinfo?id={{$cateInfo.nc_id}}"{{elseif $cateInfo.nc_id==19 or $cateInfo.nc_id==20 or $cateInfo.nc_id==21 or $cateInfo.nc_id==22}}href="/regal/strategylist?id={{$cateInfo.nc_id}}"{{else}}href="/regal?id={{$cateInfo.nc_id}}"{{/if}}>{{$cateInfo.nc_name}}</a> > <a>新闻详情</a></div>
+            <ul>
+                {{if $regalCategory}}
+                {{foreach from=$regalCategory item=vo}}
+                <li>
+                    <a {{if $vo.cateInfo.nc_id==13}}href="/regal/strategy?id={{$vo.cateInfo.nc_id}}{{elseif $vo.cateInfo.nc_id==11}} href="/regal/instant?id={{$vo.cateInfo.nc_id}}{{elseif $vo.cateInfo.nc_id==12}}href="/regal?id=14{{else}}href="/regal/firstinfo?id={{$vo.cateInfo.nc_id}}{{/if}}" {{if $id==$vo.cateInfo.nc_id }}class='on'{{/if}}>{{$vo.cateInfo.nc_name}}<i></i></a>
+                    <ul class="menu">
+                        {{if $vo.sonList}}
+                        {{foreach from=$vo.sonList item=voson}}
+                        <li><a {{if $voson.cateInfo.nc_id==19  or $voson.cateInfo.nc_id==20 or $voson.cateInfo.nc_id==20 or $voson.cateInfo.nc_id==21}} href="/regal/strategylist?id={{$voson.cateInfo.nc_id}}"{{else}}href="/regal?id={{$voson.cateInfo.nc_id}}"{{/if}}>{{$voson.cateInfo.nc_name}}</a></li>
+                        {{/foreach}}
+                        {{/if}}
+                    </ul>
+                </li>
+                {{/foreach}}
+                {{/if}}
+                <li><a href="/financeDate">财经日历</a><i></i>
+            </ul>
+            <div class="menu-bj"></div>
+        </div>
+        <div class="news-show">
+            <h2>{{$data.n_title}}</h2>
+            <div class="details">{{$data.n_addtime}}  来源：{{$data.n_source}}  编辑：{{$data.n_editor}}</div>
+            <div class="text">
+                {{if $data.n_des}}<div class="introduction">{{$data.n_des}}</div>{{/if}}
+            {{$data.n_content}}
+            </div>
+            <div class="single">
+                {{if $beforeInfo.n_title}}<a href="/news/details?id={{$beforeInfo.n_id}}" class="previous">上一篇：{{$beforeInfo.n_title}}</a>{{else}}<a class="previous">上一篇：没有了</a>{{/if}}
+                {{if $nextInfo.n_title}}<a href="/news/details?id={{$nextInfo.n_id}}" class="next">下一篇：{{$nextInfo.n_title}}</a>{{else}}<a class="next">下一篇：没有了</a>{{/if}}
+        </div>
+    </div>
+</div>
+    {{include file="common/right.html"}}
+    <div class="clear"></div>
+</div>
+{{include file="common/footer.html"}}

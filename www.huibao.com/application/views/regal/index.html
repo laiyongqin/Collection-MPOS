@@ -1,0 +1,101 @@
+{{include file="common/header.html"}}
+<style>
+    .pagination{width:100%; margin:0 auto 20px; text-align: center;}
+    .pagination a{color:#fff; display: inline-block;width:25px;height:25px; line-height:25px; margin:0 5px;border:solid 1px #fff; border-radius:3px; background: rgba(0,0,0,.5); text-align: center; background: #1f2e5b; font-size: 13px;}
+    .pagination .current{ background: #ff6519 ;}
+    .pagination a:hover{ background: #ff6519;}
+    .on{color:#ef3e39!important;}
+</style>
+<!-- 页面主体 -->
+<div class="main_vb">
+    <div class="news block2">
+        <div class="nav-title">
+            <div class="crumb"><a href="/index"><i><img src="/public/images/home.png" width="14" height="13"></i>首页</a> > <a href="/regal?id={{$id}}">{{$cateInfo.nc_name}}</a></div>
+            <ul>
+                {{if $regalCategory}}
+                {{foreach from=$regalCategory item=vo}}
+                <li>
+                    <a {{if $vo.cateInfo.nc_id==13}}href="/regal/strategy?id={{$vo.cateInfo.nc_id}}{{elseif $vo.cateInfo.nc_id==11}}href="/regal/instant?id={{$vo.cateInfo.nc_id}}{{elseif $vo.cateInfo.nc_id==12}}href="/regal?id=14{{else}}href="/regal?id={{$vo.cateInfo.nc_id}}{{/if}}" {{if $id==$vo.cateInfo.nc_id}}class='on'{{/if}}>{{$vo.cateInfo.nc_name}}<i></i></a>
+                    <ul class="menu">
+                        {{if $vo.sonList}}
+                        {{foreach from=$vo.sonList item=voson}}
+                        <li><a {{if $voson.cateInfo.nc_id==19  or $voson.cateInfo.nc_id==20 or $voson.cateInfo.nc_id==20 or $voson.cateInfo.nc_id==21 or $voson.cateInfo.nc_id==22}} href="/regal/strategylist?id={{$voson.cateInfo.nc_id}}"{{else}}href="/regal/?id={{$voson.cateInfo.nc_id}}"{{/if}}>{{$voson.cateInfo.nc_name}}</a></li>
+                        {{/foreach}}
+                        {{/if}}
+                    </ul>
+                </li>
+                {{/foreach}}
+                {{/if}}
+                <li><a href="/financeDate">财经日历</a><i></i>
+            </ul>
+            <div class="menu-bj"></div>
+        </div>
+    {{if $first}}
+        <div class="news-tit">国际新闻<a href="/regal/firstinfo?id={{$id}}">more<i><img src="/public/images/more.png" width="5" height="9"></i></a></div>
+        <div class="list2">
+            <ul>
+                {{if $picData}}
+                {{foreach from=$picData item=fv1 key=key}}
+                {{if $key < 3}}
+                <li>
+                    <a href="/news/details?id={{$fv1.n_id}}&nc_id={{$id}}">
+                        <div class="img"><img src="{{if $fv1.n_cover}}{{$fv1.n_cover}}{{else}}/public/images/list_img.jpg{{/if}}" width="134" height="94"></div>
+                        <div class="right">
+                            <h4>{{$fv1.n_title}}</h4>
+                            <div class="text">
+                                {{$fv1.n_content}}<span>{{$fv1.n_addtime}}</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {{/if}}
+                {{/foreach}}
+                {{/if}}
+            </ul>
+        </div>
+        <div class="news-tit">国内新闻<a href="/regal/firsttest?id={{$id}}">more<i><img src="/public/images/more.png" width="5" height="9"></i></a></div>
+        <div class="list4">
+            <ul>
+                {{if $testData}}
+                {{foreach from=$testData key=key2 item=fv2}}
+                {{if $key2 < 5}}
+                <li><a href="/news/details?id={{$fv2.n_id}}&nc_id={{$id}}">{{$fv2.n_title}}<span>{{$fv2.n_addtime}}</span></a></li>
+                {{/if}}
+                {{/foreach}}
+                {{/if}}
+            </ul>
+        </div>
+    {{else}}
+        <div class="list2">
+            <ul>
+                {{if $data}}
+                {{foreach from=$data item=v}}
+                <li>
+                    <a href="/news/details?id={{$v.n_id}}&nc_id={{$id}}">
+                        <div class="img"><img src="{{if $v.n_cover}}{{$v.n_cover}}{{else}}/public/images/list_img.jpg{{/if}}" width="134" height="94"></div>
+                        <div class="right">
+                            <h4>{{$v.n_title}}</h4>
+                            <div class="text">
+                                {{$v.n_content}}<span>{{$v.n_addtime}}</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {{/foreach}}
+                {{/if}}
+            </ul>
+        </div>
+        <!-- 分页 -->
+        {{if $data}}
+        <nav>
+            <ul class="pagination pull-right">{{$page}}</ul>
+        </nav>
+        {{/if}}
+    {{/if}}
+</div>
+
+    {{include file="common/right.html"}}
+
+    <div class="clear"></div>
+</div>
+{{include file="common/footer.html"}}

@@ -1,0 +1,82 @@
+{{include file="common/header.html"}}
+
+<div class="main">
+    {{include file="common/menu.html"}}
+
+    <div id="right">
+        <!--面包屑导航-->
+        <ol class="breadcrumb">
+            <li><a href="javascript:void(0);">富豪区 </a></li>
+            <li class="active">日历列表</li>
+        </ol>
+
+        <div class="right_con">
+            <!--搜索区域-->
+            <form class="form-inline pull-left" id="searchFrom">
+                <div class="form-group">
+                    日期：<input type="text" id="date" name="date" value="{{$date}}" class="form-control" placeholder="日期" />
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <button type="button" class="btn btn-default pull-right" onclick="window.location.reload();">刷新界面</button>
+            <button type="button" class="btn btn-primary pull-right"  onclick="location.href='/finance/form/'">添加新闻</button>
+            <button type="button" class="btn btn-primary pull-right"  id="collectNews">采集</button>
+            <div class="clear10"></div>
+
+            <!-- 表格 -->
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td>序号</td>
+                    <td>日期</td>
+                    <td>添加时间</td>
+                      <td>操作</td>
+                </tr>
+                {{if $data}}
+                {{foreach from=$data item=row}}
+                <tr>
+                    <td>{{$row.fc_id}}</td>
+                    <td>{{$row.fc_date}}</td>
+                    <td>{{$row.fc_addtime}}</td>
+                    <td>
+                        <a class="glyphicon glyphicon-edit" href="{{$baseUrl}}/form/id/{{$row.fc_id}}" title="编辑"></a>&nbsp;&nbsp;
+                    </td>
+                </tr>
+                {{/foreach}}
+                {{/if}}
+            </table>
+            <!-- 分页 -->
+            {{if $data}}
+            <nav>
+                <ul class="pagination pull-right">{{$page}}</ul>
+            </nav>
+            {{/if}}
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+{{include file="common/footer.html"}}
+<script src="/public/js/bootstrap-datetimepicker.js"></script>
+<script type="application/javascript">
+    $('#date').datetimepicker({
+        format: "yyyy-mm-dd",
+        autoclose: 1,
+        minView:3,
+        pickerPosition: "bottom-left"
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $('#collectNews').click(function(){
+            var date = $('#date').val();
+            $.post('/ajax/collect/calendar', {date:date}, function(data){
+                if(data.status == 'y'){
+                    alert(data.info);
+                    $('#searchFrom').submit();
+                }else{
+                    alert(data.info);
+                }
+            }, 'json')
+        })
+    })
+</script>

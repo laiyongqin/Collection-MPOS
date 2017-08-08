@@ -1,0 +1,33 @@
+{{include file="common/header.html"}}
+
+<div class="activity block2">
+    <div class="nav-title">
+        <div class="crumb"><a href="/"><i><img src="/public/images/home.png" width="14" height="13"></i>首页</a> > <a href="service.html">活动专区</a></div>
+        <b>活动专区</b>
+    </div>
+
+    <div class="banner">
+        <div class="bd">
+            <ul>
+                {{foreach from=$adList item=row}}
+                <li>
+                    <div class="pic"><img src="{{$row.a_picture}}" /></div>
+                    <!--<div class="title">{{$row.a_title}}</div>-->
+                </li>
+                {{/foreach}}
+            </ul>
+        </div>
+        <div class="hd">
+            <ul>
+                {{foreach from=$adList key=key item=row}}
+                <li {{if $key==0}}class="on"{{/if}}><img src="{{$row.a_picture}}"/></li>
+                {{/foreach}}
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+<script src="/public/js/jquery.SuperSlide.2.1.1.js"></script>
+<script type="text/javascript">jQuery(".activity .banner").slide({ mainCell:".bd ul",effect:"left",autoPlay:true });</script>
+{{include file="common/footer.html"}}

@@ -1,0 +1,11 @@
+    <ul class="fb7-list">
+        {{if $data}}
+        {{foreach from=$data item=vo}}
+        <li><a href="/novice/index/?cate={{$vo.nc_id}}&id={{$vo.n_id}}">{{$vo.n_title}}</a></li>
+        {{/foreach}}
+        {{/if}}
+    </ul>
+    <div class="clear"></div>
+    <div class="page-updown">
+        {{$page}}
+    </div>

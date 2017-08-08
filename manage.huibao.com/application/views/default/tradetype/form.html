@@ -1,0 +1,42 @@
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="passportModalLabel">{{if $row.tt_id}}修改类型{{else}}添加类型{{/if}}</h4>
+        </div>
+        <input type="hidden" name="id" value="{{$row.tt_id}}" />
+        <div class="modal-body">
+            <div class="alert alert-dismissible" role="alert" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong></strong>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">类型名称</label>
+                <div class="col-sm-6">
+                    <input type="text" name="tt_name" class="form-control" value="{{$row.tt_name}}" placeholder="分类名称" datatype="*" nullmsg="请填写分类名称" />
+                </div>
+                <span class="help-inline" style="color:red;">*</span>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-6">
+                    <select name="tt_status" id="tt_status" datatype="*" nullmsg="请选择状态" class="form-control">
+                        {{$statusOption}}
+                    </select>
+                </div>
+                <span class="help-inline" style="color:red;">*</span>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-6">
+                    <input type="text" name="tt_sort" class="form-control" value="{{$row.tt_sort}}" placeholder="排序" datatype="n" nullmsg="请填写排序" />
+                </div>
+                <span class="help-inline" style="color:red;">*</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="submit" class="btn btn-primary btn-submit">确认修改</button>
+        </div>
+    </div>
+</div>

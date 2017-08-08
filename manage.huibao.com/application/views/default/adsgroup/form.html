@@ -1,0 +1,90 @@
+{{include file="common/header.html"}}
+<link href="/public/js/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+<style></style>
+<div class="main">
+    {{include file="common/menu.html"}}
+
+    <div id="right">
+        <!--面包屑导航-->
+        <ol class="breadcrumb">
+            <li><a href="/adsgroup/index">广告组管理 </a></li>
+            <li class="active">广告组详情</li>
+        </ol>
+
+        <div class="right_con">
+            <form class="form-horizontal" id="form-save" action="/adsgroup/save/">
+                <div class="tab-pane active" id="basic_right">
+                    <input type="hidden" name="id" value="{{$row.ag_id}}" />
+                    <div class="form-group">
+                    <label class="col-sm-2 control-label">广告组名</label>
+                    <div class="col-sm-4">
+                     <input type="text" class="form-control" name="ag_name" value="{{$row.ag_name}}" placeholder="广告组名" datatype="*" nullmsg="请填写广告组名" style="width: 400px;"/>
+                    </div>
+                </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">广告别名</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="ag_cname" value="{{$row.ag_cname}}" placeholder="广告别名" datatype="*" nullmsg="请填写广告别名" style="width: 400px;" {{if $row.ag_id}}readonly{{/if}}/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">广告列表</label>
+                        <div class="col-sm-10">
+                            {{if $adsData}}
+                            {{foreach $adsData as $v}}
+                                <div style="margin:5px 10px;"><input type="checkbox" value="{{$v.a_id}}" {{if $row.ag_id}}{{if in_array($v.a_id,$row.a_ids)}}checked="true"{{/if}}{{/if}}name="banner" >&nbsp;&nbsp;{{$v.a_title}}</div>
+                            {{/foreach}}
+                            {{/if}}
+                            <input type="hidden" id="a_ids" name="a_ids" value="" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                        <button class="btn btn-primary" type="submit">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!--&lt;!&ndash;弹窗&ndash;&gt;-->
+        <!--<form class="form-horizontal" action="/ajax/productlight/save/" method="post">-->
+        <!--<div class="modal fade" id="adminModal" tabindex="-1" role="dialog"></div>-->
+        <!--</form>-->
+    </div>
+    <div class="clear"></div>
+</div>
+
+<script>
+    $("#form-save").Validform({
+        ajaxPost: true,
+        tipSweep: true,
+        tiptype:function(msg,o,cssctl){
+            if(o.type == 3)
+                $.dialog.tips(msg);
+        },
+        beforeSubmit:function(curform){
+        },
+        callback:function(response){
+            $.dialog.tips(response.info);
+            if ( response.status == 'y' ) {
+                window.setTimeout(function(){
+                    location.reload();
+                }, 2000)
+            }
+        }
+    });
+        
+    $('.btn').click(function () {
+        var id_array=new Array();
+        $('input[name="banner"]:checked').each(function(){
+            id_array.push($(this).attr('value'));
+        });
+        var idstr=id_array.join(',');
+        $("#a_ids").attr('value',idstr);
+    })
+
+</script>
+{{include file="common/footer.html"}}

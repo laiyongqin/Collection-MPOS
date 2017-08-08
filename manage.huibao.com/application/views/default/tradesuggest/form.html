@@ -1,0 +1,104 @@
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="passportModalLabel">{{if $row.ts_id}}修改建议{{else}}添加建议{{/if}}</h4>
+        </div>
+        <input type="hidden" name="id" value="{{$row.ts_id}}" />
+        <div class="modal-body">
+            <div class="alert alert-dismissible" role="alert" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong></strong>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">分类</label>
+                <div class="col-sm-6">
+                    <select name="tt_id" id="tt_id" class="form-control">
+                        {{$typeOption}}
+                    </select>
+                </div>
+                <span class="help-inline" style="color:red;">*</span>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">封面</label>
+                <div class="col-sm-4">
+                    <input type="file" name="upload" id="upload" onchange="return ajaxFileUpload();" />
+                    {{if $row.ts_cover}}
+                    <div style="padding-top:10px;"><img src="{{$smarty.const.APP_IMAGE_URL}}{{$row.ts_cover}}" id="upload-img" style="max-width:200px;"/></div>
+                    <input type="hidden" name="ts_cover" id="file"  value="{{$row.ts_cover}}" datatype="*" nullmsg="请上传封面"/>
+                    {{else}}
+                    <input type="hidden" name="ts_cover" id="file" datatype="*" nullmsg="请上传封面" />
+                    <div style="padding-top:10px;"><img src="" id="upload-img" style="max-width:200px; display:none"/></div>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">目标金额</label>
+                <div class="col-sm-6">
+                    <input type="text" name="ts_target" class="form-control" value="{{$row.ts_target}}" placeholder="目标金额" datatype="*" nullmsg="请填写目标金额" />
+                </div>
+                <span class="help-inline" style="color:red;">*</span>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">止损金额</label>
+                <div class="col-sm-6">
+                    <input type="text" name="ts_loss" class="form-control" value="{{$row.ts_loss}}" placeholder="止损金额" datatype="*" nullmsg="请填写止损金额" />
+                </div>
+                <span class="help-inline" style="color:red;">*</span>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">买入金额</label>
+                <div class="col-sm-6">
+                    <input type="text" name="ts_purchase" class="form-control" value="{{$row.ts_purchase}}" placeholder="买入金额" datatype="*" nullmsg="请填写买入金额" />
+                </div>
+                <span class="help-inline" style="color:red;">*</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="submit" class="btn btn-primary btn-submit">确认修改</button>
+        </div>
+    </div>
+</div>
+<script src="/public/js/jquery.ajaxfileupload.js"></script>
+<script src="/public/js/bootstrap-customfile.js"></script>
+<script>
+
+    $(function(){
+        $("#upload").customFileInput();
+    });
+
+    var processing = false;
+    function ajaxFileUpload() {
+        if ( processing == true ) {
+            return false;
+        }
+
+        var dialog = $.dialog.loading('上传中，请稍等！').show();
+        processing = true;
+        $.ajaxFileUpload({
+            url:'/tradesuggest/upload/',
+            secureuri:false,
+            fileElementId:'upload',
+            dataType: 'json',
+            success: function (data, status){
+                setTimeout( function() {
+                    processing = false;
+                }, 500);
+                dialog.close();
+
+                if ( data.status == 'y' ) {
+                    $("#upload-img").attr('src', data.info.url).show();
+                    $('#file').val(data.info.fileName);
+                    return;
+                }
+
+                $.dialog.error(data.info);
+                return false;
+            },
+            error: function (data, status, e){
+                $.dialog.error(e);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,105 @@
+{{include file="common/header.html"}}
+
+<div class="main">
+    {{include file="common/menu.html"}}
+
+    <div id="right">
+        <!--面包屑导航-->
+        <ol class="breadcrumb">
+            <li><a href="javascript:void(0);">用户管理 </a></li>
+            <!--<li><a href="/admin/index/">帐号管理</a></li>-->
+            <li class="active">用户管理列表</li>
+        </ol>
+
+        <div class="right_con">
+            <!--搜索区域-->
+            <form class="form-inline pull-left">
+                <div class="form-group">
+                   姓名: <input type="text" name="name" value="{{$name}}" class="form-control" placeholder="姓名">&nbsp;&nbsp;
+                    状态：<select name="status" id="status" class="form-control">
+                        {{$statusOption}}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <button type="button" class="btn btn-default pull-right" onclick="window.location.reload();">刷新界面</button>
+            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#adminModal" href="/member/form/">添加用户</button>
+
+            <div class="clear10"></div>
+
+            <!-- 表格 -->
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td>序号</td>
+                    <td>登录名</td>
+                    <td>姓名</td>
+                    <td>密码</td>
+                    <td>状态</td>
+                    <td>修改密码</td>
+                    <td>添加时间</td>
+                    <td>操作</td>
+                </tr>
+                {{if $data}}
+                {{foreach from=$data item=row}}
+                <tr>
+                    <td>{{$row.m_id}}</td>
+                    <td>{{$row.m_username}}</td>
+                    <td>{{$row.m_realname}}</td>
+                    <td class="check_password"><label class="label label-success">查看密码</label><input type="hidden" name="check_content" value="{{$row.m_password}}"></td>
+                    <td>
+                        <a href="#" data-json="确认要更改状态吗？" data-href="/ajax/member/status/id/{{$row.m_id}}/status/{{$row.m_status}}">
+                            <i class="glyphicon {{if $row.m_status == 1}}glyphicon-eye-open{{else}}glyphicon-eye-close{{/if}}" title="{{if $row.m_status == 2}}禁用{{else}}正常{{/if}}"></i>
+                            {{if $row.m_status == 1}}<span class="label label-success">正常</span>{{else}}<span class="label label-warning">禁用</span>{{/if}}
+                        </a>
+                    </td>
+                    <td>
+                        <a data-toggle="modal" href="{{$baseUrl}}formPassword/id/{{$row.m_id}}" data-target="#formPasswordModal" title="修改密码"><i class="glyphicon glyphicon-lock"></i></a>
+                    </td>
+                    <td>{{$row.m_addtime}}</td>
+                    <td>
+                        <a class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#adminModal" href="{{$baseUrl}}/form/id/{{$row.m_id}}" title="编辑管理员"></a>&nbsp;&nbsp;
+                    </td>
+                </tr>
+                {{/foreach}}
+                {{/if}}
+            </table>
+
+            <!-- 分页 -->
+            {{if $data}}
+            <nav>
+                <ul class="pagination pull-right">{{$page}}</ul>
+            </nav>
+            {{/if}}
+        </div>
+
+        <!--弹窗-->
+        <form class="form-horizontal" action="/ajax/member/save/" method="post">
+            <div class="modal fade" id="adminModal" tabindex="-1" role="dialog"></div>
+        </form>
+
+        <form class="form-horizontal" method="post" action="/ajax/member/editPassword/" >
+            <div class="modal fade" id="formPasswordModal" tabindex="-1" role="dialog"></div>
+        </form>
+    </div>
+    <div class="clear"></div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.check_password').click(function () {
+            var password = $(this).find('input').val();
+            if (typeof(password) == "undefined")
+            {
+               return false;
+            }
+            var check    = $(this);
+            $.post('/ajax/member/checkPassword/', {password : password}, function(data){
+                if(data.status=='y'){
+                    check.empty().html('<span class="label label-danger">'+data.info+'</span>');
+                }
+            }, 'json');
+        })
+
+
+    })
+</script>
+{{include file="common/footer.html"}}

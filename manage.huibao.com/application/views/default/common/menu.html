@@ -1,0 +1,72 @@
+<div id="left">
+    <div class="btn-group-vertical" id="km_ment" role="group" aria-label="...">
+
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>系统管理
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                {{if $smarty.const.A_ROLE == 1}}<li><a href="/admin/index/">系统管理员</a></li>{{/if}}
+            </ul>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>新闻管理
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/newscategory/index">新闻分类</a></li>
+                <li><a href="/news/index">新闻列表</a></li>
+            </ul>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>交易管理
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/tradetype/index">交易类型</a></li>
+                <li><a href="/tradesuggest/index">交易建议</a></li>
+            </ul>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>富豪区
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/finance/index">财经日历</a></li>
+            </ul>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span>特色服务
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/sofe/index">软件管理</a></li>
+                <li><a href="/feature/form">单篇管理</a></li>
+            </ul>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span>活动专区
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/ads/index">广告管理</a></li>
+                <li><a href="/adsgroup/index">广告组管理</a></li>
+            </ul>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>用户系统
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/member/index/">会员管理</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

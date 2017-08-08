@@ -1,0 +1,135 @@
+{{include file="common/header.html"}}
+<div class="main">
+    {{include file="common/menu.html"}}
+
+    <div id="right">
+        <!--面包屑导航-->
+        <ol class="breadcrumb">
+            <li><a href="/sofe/index">特色服务 </a></li>
+            <li class="active">软件详情</li>
+        </ol>
+
+        <div class="right_con">
+
+            <form class="form-horizontal" id="form-save" action="/sofe/save/">
+                <div class="tab-pane active" id="basic_right">
+                    <input type="hidden" name="id" value="{{$row.s_id}}" />
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="s_name" value="{{$row.s_name}}" placeholder="标题" datatype="*" nullmsg="请填写标题" style="width: 400px;"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">下载链接</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="s_download_link" value="{{$row.s_download_link}}" placeholder="下载链接" datatype="url" nullmsg="请填写下载链接" style="width: 398px;"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">封面图</label>
+                        <div class="col-sm-4">
+                            <input type="file" name="upload" id="upload" onchange="return ajaxFileUpload();" />
+                            <div style="padding-top:10px;"><img src="{{if $row.s_cover}}{{$smarty.const.APP_IMAGE_URL}}{{$row.s_cover}}{{/if}}" id="upload-img" style="max-width:200px;{{if !$row.s_cover}}display:none;{{/if}}"/></div>
+                            <input type="hidden" name="s_cover" id="file" value="{{$row.s_cover}}"  />
+                        </div>
+                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">推荐状态</label>-->
+                        <!--<div class="col-sm-4">-->
+                            <!--<select name="s_recommend" datatype="*" null="请选择状态" class="form-control" style="width:200px;">-->
+                                <!--{{$recommendOption}}-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">排序</label>
+                        <div class="col-sm-4">
+                            <input type="text" style="width:100px;" class="form-control" name="s_sort" value="{{$row.s_sort}}" placeholder="排序" datatype="n" nullmsg="请填写排序" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                        <button class="btn btn-primary" type="submit">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<script src="/public/js/jquery.ajaxfileupload.js"></script>
+<script src="/public/js/bootstrap-customfile.js"></script>
+<script src="/public/js/bootstrap-datetimepicker.js"></script>
+<script>
+    $("#form-save").Validform({
+        ajaxPost: true,
+        tipSweep: true,
+        tiptype:function(msg,o,cssctl){
+            if(o.type == 3)
+                $.dialog.tips(msg);
+        },
+        beforeSubmit:function(curform){
+        },
+        callback:function(response){
+            $.dialog.tips(response.info);
+            if ( response.status == 'y' ) {
+                window.setTimeout(function(){
+                    location.reload();
+                }, 2000)
+            }
+        }
+    });
+
+    /*初始化上传文件*/
+    $("#upload").customFileInput();
+    var processing = false;
+    function ajaxFileUpload() {
+        if ( processing == true ) {
+            return false;
+        }
+
+        var dialog     = $.dialog.loading('上传中，请稍等！').show();
+        processing = true;
+        $.ajaxFileUpload({
+            url:'/sofe/upload/',
+            secureuri:false,
+            fileElementId:'upload',
+            dataType: 'json',
+            success: function (data, status){
+                setTimeout( function() {
+                    processing = false;
+                }, 500);
+                dialog.close();
+
+                if ( data.status == 'y' ) {
+                    $("#upload-img").attr('src', data.info.url).show();
+                    $('#file').val(data.info.fileName);
+                    return;
+                }
+
+                $.dialog.error(data.info);
+                return false;
+            },
+            error: function (data, status, e){
+                $.dialog.error(e);
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        $('#nc_type').bind('change', function(){
+            var tid = $(this).val();
+            $.post('/newscategory/getType', {tid,tid}, function(data){
+                if(data.code == 1){
+                    $('#nc_id').html(data.data);
+                }
+            }, 'json')
+        })
+    })
+</script>
+{{include file="common/footer.html"}}

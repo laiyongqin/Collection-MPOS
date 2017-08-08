@@ -1,0 +1,105 @@
+{{include file="common/header.html"}}
+<link href="/public/css/lq.datetimepick.css" rel="stylesheet">
+<link href="/public/css/rili.css" rel="stylesheet">
+<script src="/public/js/selectUi.js"></script>
+<script src="/public/js/lq.datetimepick.js"></script>
+<style>
+    html, body { font-family:"微软雅黑";
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<!-- 页面主体 -->
+<div class="calendar block2">
+    <div class="nav-title news">
+        <div class="nav-title">
+            <div class="crumb"><a href="/index"><i><img src="/public/images/home.png" width="14" height="13"></i>首页</a></div>
+            <ul>
+                {{if $regalCategory}}
+                {{foreach from=$regalCategory item=vo}}
+                <li>
+                    <a {{if $vo.cateInfo.nc_id==13}}href="/regal/strategy?id={{$vo.cateInfo.nc_id}}{{elseif $vo.cateInfo.nc_id==11}}href="/regal/instant?id={{$vo.cateInfo.nc_id}}{{elseif $vo.cateInfo.nc_id==12}}href="/regal?id=14{{else}}href="/regal?id={{$vo.cateInfo.nc_id}}{{/if}}" {{if $id==$vo.cateInfo.nc_id}}class='on'{{/if}}>{{$vo.cateInfo.nc_name}}<i></i></a>
+                    <ul class="menu">
+                        {{if $vo.sonList}}
+                        {{foreach from=$vo.sonList item=voson}}
+                        <li><a {{if $voson.cateInfo.nc_id==19  or $voson.cateInfo.nc_id==20 or $voson.cateInfo.nc_id==20 or $voson.cateInfo.nc_id==21 or $voson.cateInfo.nc_id==22}} href="/regal/strategylist?id={{$voson.cateInfo.nc_id}}"{{else}}href="/regal/?id={{$voson.cateInfo.nc_id}}"{{/if}}>{{$voson.cateInfo.nc_name}}</a></li>
+                        {{/foreach}}
+                        {{/if}}
+                    </ul>
+                </li>
+                {{/foreach}}
+                {{/if}}
+                <li><a href="/financeDate" style="color:#c33;">财经日历</a><i></i></li>
+            </ul>
+            <div class="menu-bj"></div>
+        </div>
+    </div>
+
+    <div class="con">
+        <div class="select-time block" ><a><input name="date" id="date" type="text" value="{{$today}}" ><span id="selectDate">选择日期</span></a></div>
+        <div class="week">
+            <ul>
+                <li><a href="/financeDate?day={{$lastWeekOne}}"><span>上一周</span></a></li>
+                {{foreach from=$list item=vo}}
+                <li {{if $vo.day == $today}}class="on"{{/if}}>
+                    <a href="/financeDate?day={{$vo.day}}">
+                        <p>{{$vo.tip}}</p>
+                        <p>{{$vo.show}}</p>
+                    </a>
+                </li>
+                {{/foreach}}
+                   <li><a href="/financeDate?day={{$nextWeekOne}}"><span>下一周</span></a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <div class="time-tit">{{$today}}  财经数据一览</div>
+        <div class="calendar-embed">
+        {{$calendarInfo.fc_content}}
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#date").on("click",function(e){
+            e.stopPropagation();
+            var object = $(this);
+            $(this).lqdatetimepicker({
+                css : 'datetime-day',
+                dateType : 'D',
+                selectback : function(){
+                    location.href = '/financeDate?day=' + object.val();
+                }
+            });
+
+        });
+
+        $('#date').change(function(){
+            location.href = '/financeDate?day=' + $(this).val();
+        });
+
+        $('#selectDate').click(function(){
+            $('#date').click();
+        });
+    })
+
+    function getMore(that){
+        if($('#moreData').is(':hidden')){
+            $('#moreData').show();
+            $(that).html("点击收起");
+        }else{
+            $('#moreData').hide();
+            $(that).html("查看完整交易日数据");
+        }
+    }
+    function getEventMore(that){
+        if($('#next_event').is(':hidden')){
+            $('#next_event').show();
+            $(that).html("点击收起");
+        }else{
+            $('#next_event').hide();
+            $(that).html("查看完整交易日大事�");
+        }
+    }
+</script>
+{{include file="common/footer.html"}}
